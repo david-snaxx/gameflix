@@ -87,6 +87,11 @@ public class GameController {
         }
     }
 
+    /**
+     * Deletes the game with the given GameFlix id from the database.
+     * @param id The GameFlix id of the game to delete.
+     * @return A response entity with operation success/failure
+     */
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteIgdbGame(@PathVariable("id") Long id) {
         try {
@@ -97,6 +102,11 @@ public class GameController {
         }
     }
 
+    /**
+     * Retrieves the {@link Game} corresponding to the given GameFlix id from the database.
+     * @param id The GameFlix game id to retrieve.
+     * @return A {@link Game} object for the given id if one exists in the database.
+     */
     @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> getIgdbGame(@PathVariable("id") Long id) {
         try {
@@ -107,6 +117,21 @@ public class GameController {
                 return ResponseEntity.notFound().build();
             }
         } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    /**
+     * Adds a game to the GameFlix database.
+     * @param game The {@link Game} object to save.
+     * @return A response entity for operation success/failure.
+     */
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public ResponseEntity<?> addIgdbGame(@RequestBody Game game) {
+        try {
+            this.gameService.save(game);
+            return ResponseEntity.ok(game);
+        }  catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
