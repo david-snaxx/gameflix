@@ -73,7 +73,7 @@ public class IgdbService {
      * @param IgdbGameId The IGDB id of the game to find.
      * @return An {@link IgdbGame} object representing the game for the input ID.
      */
-    public IgdbGame getFullyDefinedGameById(Integer IgdbGameId) {
+    public Game getFullyDefinedGameById(Integer IgdbGameId) {
         // igdb search query: full info, searching with id, only give 1 result
         String query = String.format("fields \n" +
                 "    id,\n" +
@@ -106,7 +106,7 @@ public class IgdbService {
                 entity,
                 IgdbGame[].class
         );
-        return response.getBody()[0];
+        return this.translateIgdbGame(response.getBody()[0]);
     }
 
     /**

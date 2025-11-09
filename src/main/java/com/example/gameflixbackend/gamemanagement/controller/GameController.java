@@ -1,6 +1,6 @@
 package com.example.gameflixbackend.gamemanagement.controller;
 
-import com.example.gameflixbackend.gamemanagement.model.IgdbGame;
+import com.example.gameflixbackend.gamemanagement.model.Game;
 import com.example.gameflixbackend.gamemanagement.model.IgdbSearchResult;
 import com.example.gameflixbackend.gamemanagement.service.IgdbService;
 import com.example.gameflixbackend.gamemanagement.service.TwitchAuthenticationService;
@@ -52,10 +52,15 @@ public class GameController {
         }
     }
 
+    /**
+     * Retrieves a {@link Game} object based on the information received from the IGDB.
+     * @param gameId The IGDB game id to search for.
+     * @return A {@link Game} object defined by the metadata for the input game on the IGDB.
+     */
     @RequestMapping(value = "igdb/search/id/{gameId}", method = RequestMethod.GET)
     public ResponseEntity<?> getGameById(@PathVariable("gameId") Integer gameId) {
         try {
-            IgdbGame result = this.igdbService.getFullyDefinedGameById(gameId);
+            Game result = this.igdbService.getFullyDefinedGameById(gameId);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
