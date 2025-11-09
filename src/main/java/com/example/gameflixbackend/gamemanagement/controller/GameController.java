@@ -6,10 +6,7 @@ import com.example.gameflixbackend.gamemanagement.service.IgdbService;
 import com.example.gameflixbackend.gamemanagement.service.TwitchAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/games")
@@ -57,7 +54,7 @@ public class GameController {
      * @param gameId The IGDB game id to search for.
      * @return A {@link Game} object defined by the metadata for the input game on the IGDB.
      */
-    @RequestMapping(value = "igdb/search/id/{gameId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/igdb/search/id/{gameId}", method = RequestMethod.GET)
     public ResponseEntity<?> getGameById(@PathVariable("gameId") Integer gameId) {
         try {
             Game result = this.igdbService.getFullyDefinedGameById(gameId);
@@ -65,5 +62,16 @@ public class GameController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @RequestMapping(value = "/add/igdb/{gameId}", method = RequestMethod.POST)
+    public ResponseEntity<?> adddIgdbGame(@PathVariable("gameId") Integer gameId) {
+        try {
+            Game result = this.igdbService.getFullyDefinedGameById(gameId);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+
     }
 }
