@@ -11,5 +11,7 @@ public class Game {
     public Long id;
 
     public String name;
-
+    private String summary;
+    private Double rating;
+    private String coverUrl;
 }

@@ -7,6 +7,10 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Objects;
 
+/**
+ * The TwitchAuthenticationService is used to make a request for the latest authorization token needed to make
+ * API calls to the Internet Games Database (IGDB) which provides public game metadata.
+ */
 @Service
 public class TwitchAuthenticationService {
 
