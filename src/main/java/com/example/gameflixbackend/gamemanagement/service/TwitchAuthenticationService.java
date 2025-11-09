@@ -25,7 +25,7 @@ public class TwitchAuthenticationService {
         this.restTemplate = restTemplate;
         this.igdbClientId = clientId;
         this.igdbClientSecret = clientSecret;
-        this.authApiUrl = "https_//id.twitch.tv/oauth2/token" +
+        this.authApiUrl = "https://id.twitch.tv/oauth2/token" +
                 "?client_id=" + clientId +
                 "&client_secret=" + clientSecret +
                 "&grant_type=client_credentials";
@@ -37,7 +37,7 @@ public class TwitchAuthenticationService {
      */
     public String getTwitchAccessToken() {
         try {
-            TwitchAccessToken accessToken = restTemplate.getForObject(authApiUrl, TwitchAccessToken.class);
+            TwitchAccessToken accessToken = restTemplate.postForObject(authApiUrl, null, TwitchAccessToken.class);
             Objects.requireNonNull(accessToken, "Failed to get auth token from Twitch");
             return accessToken.accessToken;
         } catch (Exception e) {
