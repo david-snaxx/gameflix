@@ -12,62 +12,78 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
-    @Column(name = "igdbId", unique = true, nullable = true)
+    @Column(name = "igdb_id", unique = true, nullable = true)
     public Long igdbId;
 
     @Column(name = "name", unique = true, nullable = true)
     public String name;
 
-    @Column(name = "summary", unique = false, nullable = true)
+    @Column(name = "summary", columnDefinition = "TEXT", nullable = true)
     public String summary;
 
-    @Column(name = "storyline", unique = false, nullable = true)
-    public String storyline;
+    // this is too long
+//    @Column(name = "storyline", columnDefinition = "TEXT", nullable = true)
+//    public String storyline;
 
-    @Column(name = "fist_release_date", unique = false, nullable = true)
+    @Column(name = "first_release_date", nullable = true)
     public Long firstReleaseDate;
 
-    @Column(name = "age_rating", unique = false, nullable = true)
+    @ElementCollection
+    @CollectionTable(name = "game_age_ratings", joinColumns = @JoinColumn(name = "game_id"))
     public List<String> ageRatings;
 
-    @Column(name = "alternative_name", unique = false, nullable = true)
+    @ElementCollection
+    @CollectionTable(name = "game_alternative_names", joinColumns = @JoinColumn(name = "game_id"))
     public List<String> alternativeNames;
 
-    @Column(name = "artwork_url", unique = true, nullable = true)
+    @ElementCollection
+    @CollectionTable(name = "game_artwork_urls", joinColumns = @JoinColumn(name = "game_id"))
     public List<String> artworkUrls;
 
-    @Column(name = "cover_url", unique = true, nullable = true)
-    public String coverUrl;
+    @Column(name = "cover_url", columnDefinition = "TEXT", nullable = true)
+    public String coverUrl; // This one is a single String, so it's fine
 
-    @Column(name = "expansion", unique = false, nullable = true)
+    @ElementCollection
+    @CollectionTable(name = "game_expansions", joinColumns = @JoinColumn(name = "game_id"))
     public List<String> expansions;
 
-    @Column(name = "genre", unique = false, nullable = true)
+    @ElementCollection
+    @CollectionTable(name = "game_genres", joinColumns = @JoinColumn(name = "game_id"))
     public List<String> genres;
 
-    @Column(name = "developer", unique = false, nullable = true)
+    @ElementCollection
+    @CollectionTable(name = "game_developers", joinColumns = @JoinColumn(name = "game_id"))
     public List<String> developers;
 
-    @Column(name = "publisher", unique = false, nullable = true)
+    @ElementCollection
+    @CollectionTable(name = "game_publishers", joinColumns = @JoinColumn(name = "game_id"))
     public List<String> publishers;
 
-    @Column(name = "keyword", unique = false, nullable = true)
+    @ElementCollection
+    @CollectionTable(name = "game_keywords", joinColumns = @JoinColumn(name = "game_id"))
     public List<String> keywords;
 
-    @Column(name = "platform", unique = false, nullable = true)
+    @ElementCollection
+    @CollectionTable(name = "game_platforms", joinColumns = @JoinColumn(name = "game_id"))
     public List<String> platforms;
 
-    @Column(name = "screenshot_url", unique = false, nullable = true)
+    @ElementCollection
+    @CollectionTable(name = "game_screenshot_urls", joinColumns = @JoinColumn(name = "game_id"))
     public List<String> screenshotUrls;
 
-    @Column(name = "theme", unique = false, nullable = true)
+    @ElementCollection
+    @CollectionTable(name = "game_themes", joinColumns = @JoinColumn(name = "game_id"))
     public List<String> themes;
 
-    @Column(name = "video_url", unique = false, nullable = true)
+    @ElementCollection
+    @CollectionTable(name = "game_video_urls", joinColumns = @JoinColumn(name = "game_id"))
     public List<String> videoUrls;
 
-    @Column(name = "website_url", unique = false, nullable = true)
+    @ElementCollection
+    @CollectionTable(name = "game_website_urls", joinColumns = @JoinColumn(name = "game_id"))
     public List<String> websiteUrls;
+
+    public Game () {}
 
     public Game(Long igdbId, String name, String summary, String storyline,
                 Long firstReleaseDate, List<String> ageRatings, List<String> alternativeNames,
@@ -78,7 +94,7 @@ public class Game {
         this.igdbId = igdbId;
         this.name = name;
         this.summary = summary;
-        this.storyline = storyline;
+//        this.storyline = storyline;
         this.firstReleaseDate = firstReleaseDate;
         this.ageRatings = ageRatings;
         this.alternativeNames = alternativeNames;

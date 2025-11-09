@@ -24,8 +24,11 @@ public class SecurityFilterChainConfig {
                         .requestMatchers(HttpMethod.GET, "/games/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/games/igdb/").permitAll()
                         .requestMatchers(HttpMethod.GET, "/games/igdb/accesstoken").permitAll()
-                        .requestMatchers(HttpMethod.GET, "games/igdb/search/name/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "games/igdb/search/id/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/games/igdb/search/name/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/games/igdb/search/id/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/games/add/igdb/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/games/delete/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/games/get/**").permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();
