@@ -1,6 +1,6 @@
 package com.example.gameflixbackend.gamemanagement.controller;
 
-import com.example.gameflixbackend.gamemanagement.model.Game;
+import com.example.gameflixbackend.gamemanagement.model.IgdbSearchResult;
 import com.example.gameflixbackend.gamemanagement.service.IgdbService;
 import com.example.gameflixbackend.gamemanagement.service.TwitchAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +26,12 @@ public class GameController {
      * @param gameName The name of the game to search for in the IGDB database.
      * @return The 5 closest matching games in the IGDB based on the input name.
      */
-    @RequestMapping(value = "/{gameName}", method = RequestMethod.GET)
-    public ResponseEntity<String> getGame(@PathVariable("gameName") String gameName) {
+    @RequestMapping(value = "/igdb/search/{gameName}", method = RequestMethod.GET)
+    public ResponseEntity<?> getGame(@PathVariable("gameName") String gameName) {
         try {
-            // This will now return the raw JSON string
-            String jsonResponse = this.igdbService.makeRequest(gameName);
-            return ResponseEntity.ok(jsonResponse);
+            IgdbSearchResult[] results = this.igdbService.searchForGames(gameName);
+            return ResponseEntity.ok(results);
         } catch (Exception e) {
-            // Return the exception message as the error
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

@@ -1,15 +1,13 @@
 package com.example.gameflixbackend.gamemanagement.service;
 
+import com.example.gameflixbackend.gamemanagement.model.IgdbSearchResult;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * The IgdbService handles making requests to the Twitch Internet Games Database which is a public
@@ -44,32 +42,23 @@ public class IgdbService {
         return headers;
     }
 
+
     /**
-     * ***ADDED: Method to make a test request to IGDB***
-     * * Makes a simple test request to the IGDB API to find games matching a name.
+     * Search the IGDB for the 5 closets matching games by input name.
      * @param gameName The name of the game to search for.
-     * @return The raw JSON response string from the IGDB API.
+     * @return A JSON string containing {@link IgdbService}s where the first is the closest matching game.
      */
-    public String makeRequest(String gameName) {
-        // 1. Create the Apocalypso query string.
-        // We "search" for the gameName and request a few fields.
+    public IgdbSearchResult[] searchForGames(String gameName) {
+        // igdb search format
         String query = String.format("fields name, summary; search \"%s\"; limit 5;", gameName);
-
-        // 2. Get the required headers
         HttpHeaders headers = createHeaders();
-
-        // 3. Create the HttpEntity, passing the query as the request body
         HttpEntity<String> entity = new HttpEntity<>(query, headers);
-
-        // 4. Make the POST request and ask for the response as a raw String
-        ResponseEntity<String> response = restTemplate.exchange(
+        ResponseEntity<IgdbSearchResult[]> response = restTemplate.exchange(
                 BASE_URL,
                 HttpMethod.POST,
                 entity,
-                String.class // We want the raw JSON response as a String
+                IgdbSearchResult[].class
         );
-
-        // 5. Return the response body
         return response.getBody();
     }
 }

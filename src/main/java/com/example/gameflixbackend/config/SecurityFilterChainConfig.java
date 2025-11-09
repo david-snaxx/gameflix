@@ -24,6 +24,7 @@ public class SecurityFilterChainConfig {
                         .requestMatchers(HttpMethod.GET, "/games/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/games/igdb/").permitAll()
                         .requestMatchers(HttpMethod.GET, "/games/igdb/accesstoken").permitAll()
+                        .requestMatchers(HttpMethod.POST, "games/igdb/search/**").permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();
