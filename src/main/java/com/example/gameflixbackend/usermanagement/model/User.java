@@ -6,7 +6,6 @@ import java.io.Serializable;
 
 /**
  * Represents all information tied to a gameflix user.
- * //todo: expand with more fields as other services are introduced, for example: where's the game history?
  */
 @Entity
 @Table(name = "users")
