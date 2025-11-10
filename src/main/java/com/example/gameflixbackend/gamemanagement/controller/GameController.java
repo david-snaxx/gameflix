@@ -1,5 +1,6 @@
 package com.example.gameflixbackend.gamemanagement.controller;
 
+import com.example.gameflixbackend.gamemanagement.model.IgdbGame;
 import com.example.gameflixbackend.gamemanagement.model.IgdbSearchResult;
 import com.example.gameflixbackend.gamemanagement.service.IgdbService;
 import com.example.gameflixbackend.gamemanagement.service.TwitchAuthenticationService;
@@ -51,10 +52,11 @@ public class GameController {
         }
     }
 
+
     @RequestMapping(value = "igdb/search/id/{gameId}", method = RequestMethod.GET)
     public ResponseEntity<?> getGameById(@PathVariable("gameId") Integer gameId) {
         try {
-            String result = this.igdbService.getFullyDefinedGameById(gameId);
+            IgdbGame result = this.igdbService.getFullyDefinedGameById(gameId);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

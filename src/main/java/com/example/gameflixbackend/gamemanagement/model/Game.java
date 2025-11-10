@@ -2,6 +2,8 @@ package com.example.gameflixbackend.gamemanagement.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "games")
 public class Game {
@@ -9,9 +11,4 @@ public class Game {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
-
-    public String name;
-    private String summary;
-    private Double rating;
-    private String coverUrl;
 }

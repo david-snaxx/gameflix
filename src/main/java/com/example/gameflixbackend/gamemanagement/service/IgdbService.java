@@ -1,5 +1,6 @@
 package com.example.gameflixbackend.gamemanagement.service;
 
+import com.example.gameflixbackend.gamemanagement.model.IgdbGame;
 import com.example.gameflixbackend.gamemanagement.model.IgdbSearchResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -67,33 +68,24 @@ public class IgdbService {
         return response.getBody();
     }
 
-    public String getFullyDefinedGameById(Integer IgdbGameId) {
+    /**
+     * Gets all relevant info for a game from the IGDB based on its IGDB id.
+     * Note that the {@link IgdbGame} object returned contains IGDB ids and not fully defined info.
+     * @param IgdbGameId The IGDB id for the game to search for.
+     * @return A {@link IgdbGame} object representing the game from the IGDB.
+     */
+    public IgdbGame getFullyDefinedGameById(Integer IgdbGameId) {
         // igdb search query: full info, searching with id, only give 1 result
         String query = String.format("fields *; where id = %d; limit 1;", IgdbGameId);
         HttpHeaders headers = createHeaders();
         HttpEntity<String> entity = new HttpEntity<>(query, headers);
 
-        ResponseEntity<String> response = restTemplate.exchange(
+        ResponseEntity<IgdbGame[]> response = restTemplate.exchange(
                 BASE_URL,
                 HttpMethod.POST,
                 entity,
-                String.class
+                IgdbGame[].class
         );
-
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonResponse = response.getBody();
-        try {
-            JsonNode root =  mapper.readTree(jsonResponse);
-            // does data exist?
-            if (root.isArray() && root.size() > 0) {
-                // give back the first result json
-                JsonNode firstNode = root.get(0);
-                return mapper.writeValueAsString(firstNode);
-            } else {
-                return null;
-            }
-        } catch (Exception e) {
-            return null;
-        }
+        return response.getBody()[0];
     }
 }
