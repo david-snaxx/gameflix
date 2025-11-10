@@ -52,7 +52,6 @@ public class GameController {
         }
     }
 
-
     @RequestMapping(value = "igdb/search/id/{gameId}", method = RequestMethod.GET)
     public ResponseEntity<?> getGameById(@PathVariable("gameId") Integer gameId) {
         try {

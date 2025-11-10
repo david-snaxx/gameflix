@@ -1,11 +1,6 @@
 package com.example.gameflixbackend.gamemanagement.service;
 
-import com.example.gameflixbackend.gamemanagement.model.IgdbGame;
-import com.example.gameflixbackend.gamemanagement.model.IgdbSearchResult;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.gameflixbackend.gamemanagement.model.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -13,6 +8,9 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The IgdbService handles making requests to the Twitch Internet Games Database which is a public
@@ -69,14 +67,36 @@ public class IgdbService {
     }
 
     /**
-     * Gets all relevant info for a game from the IGDB based on its IGDB id.
-     * Note that the {@link IgdbGame} object returned contains IGDB ids and not fully defined info.
-     * @param IgdbGameId The IGDB id for the game to search for.
-     * @return A {@link IgdbGame} object representing the game from the IGDB.
+     * Gets a {@link IgdbGame} based on the given IGDB game id.
+     * The object returned should be translated into an {@link com.example.gameflixbackend.gamemanagement.model.Game} object
+     * before being stored in the database.
+     * @param IgdbGameId The IGDB id of the game to find.
+     * @return An {@link IgdbGame} object representing the game for the input ID.
      */
     public IgdbGame getFullyDefinedGameById(Integer IgdbGameId) {
         // igdb search query: full info, searching with id, only give 1 result
-        String query = String.format("fields *; where id = %d; limit 1;", IgdbGameId);
+        String query = String.format("fields \n" +
+                "    id,\n" +
+                "    name,\n" +
+                "    summary,\n" +
+                "    storyline,\n" +
+                "    first_release_date,\n" +
+                "    age_ratings.*,\n" +
+                "    alternative_names.name,\n" +
+                "    artworks.image_id, artworks.url,\n" +
+                "    cover.*,\n" +
+                "    expansions.name,\n" +
+                "    genres.name,\n" +
+                "    involved_companies.developer, involved_companies.publisher, involved_companies.company.name,\n" +
+                "    keywords.name,\n" +
+                "    platforms.name,\n" +
+                "    screenshots.image_id, screenshots.url,\n" +
+                "    themes.name,\n" +
+                "    videos.name, videos.video_id,\n" +
+                "    websites.url, websites.category\n" +
+                ";\n" +
+                "where id = %d;\n" +
+                "limit 1;", IgdbGameId);
         HttpHeaders headers = createHeaders();
         HttpEntity<String> entity = new HttpEntity<>(query, headers);
 
@@ -87,5 +107,57 @@ public class IgdbService {
                 IgdbGame[].class
         );
         return response.getBody()[0];
+    }
+
+    /**
+     * Transforms a {@link IgdbGame} into an {@link Game}.
+     * Game objects are fully defined game metadata objects (i.e. full text instead of id based) and
+     * are ready for storage in the database.
+     * @param igdbGame The {@link IgdbGame} object.
+     * @return A {@link Game} object constructed using the input IGDB object.
+     */
+    private Game translateIgdbGame(IgdbGame igdbGame) {
+        // age ratings are ID based when direct from IGDB
+        List<String> fullAgeRatings = igdbGame.ageRatings.stream()
+                .map(ageRating -> {
+                    String organization = IgdbAgeRatingCategory.fromId(ageRating.category);
+                    String ratingVal = IgdbAgeRatingValue.fromId(ageRating.rating);
+                    return organization + " " + ratingVal;
+                })
+                .toList();
+
+        // devs and publishers are stored in the same initial list, but have boolean flags
+        List<String> fullDevelopers = new ArrayList<>();
+        List<String> fullPublishers = new ArrayList<>();
+        igdbGame.involvedCompanies.stream()
+                .forEach(company -> {
+                    if (company.developer) {
+                        fullDevelopers.add(company.getCompany().getName());
+                    } else if (company.publisher) {
+                        fullPublishers.add(company.getCompany().getName());
+                    }
+                });
+
+        return new Game(
+                igdbGame.id,
+                igdbGame.name,
+                igdbGame.summary,
+                igdbGame.storyline,
+                igdbGame.firstReleaseDate,
+                fullAgeRatings,
+                igdbGame.alternativeNames.stream().map(IgdbGame.SimpleReference::getName).toList(),
+                igdbGame.artworks.stream().map(IgdbGame.ImageInfo::getUrl).toList(),
+                igdbGame.cover.url,
+                igdbGame.expansions.stream().map(IgdbGame.SimpleReference::getName).toList(),
+                igdbGame.genres.stream().map(IgdbGame.SimpleReference::getName).toList(),
+                fullDevelopers,
+                fullPublishers,
+                igdbGame.keywords.stream().map(IgdbGame.SimpleReference::getName).toList(),
+                igdbGame.platforms.stream().map(IgdbGame.SimpleReference::getName).toList(),
+                igdbGame.screenshots.stream().map(IgdbGame.ImageInfo::getUrl).toList(),
+                igdbGame.themes.stream().map(IgdbGame.SimpleReference::getName).toList(),
+                igdbGame.videos.stream().map(IgdbGame.Video::getVideoId).toList(),
+                igdbGame.websites.stream().map(IgdbGame.Website::getUrl).toList()
+        );
     }
 }
