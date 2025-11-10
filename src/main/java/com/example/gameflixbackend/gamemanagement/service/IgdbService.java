@@ -1,6 +1,10 @@
 package com.example.gameflixbackend.gamemanagement.service;
 
 import com.example.gameflixbackend.gamemanagement.model.IgdbSearchResult;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -49,10 +53,11 @@ public class IgdbService {
      * @return A JSON string containing {@link IgdbService}s where the first is the closest matching game.
      */
     public IgdbSearchResult[] searchForGames(String gameName) {
-        // igdb search format
+        // igdb search query: basic summary info, searching with name, only give 5 results
         String query = String.format("fields name, summary; search \"%s\"; limit 5;", gameName);
         HttpHeaders headers = createHeaders();
         HttpEntity<String> entity = new HttpEntity<>(query, headers);
+
         ResponseEntity<IgdbSearchResult[]> response = restTemplate.exchange(
                 BASE_URL,
                 HttpMethod.POST,
@@ -60,5 +65,35 @@ public class IgdbService {
                 IgdbSearchResult[].class
         );
         return response.getBody();
+    }
+
+    public String getFullyDefinedGameById(Integer IgdbGameId) {
+        // igdb search query: full info, searching with id, only give 1 result
+        String query = String.format("fields *; where id = %d; limit 1;", IgdbGameId);
+        HttpHeaders headers = createHeaders();
+        HttpEntity<String> entity = new HttpEntity<>(query, headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                BASE_URL,
+                HttpMethod.POST,
+                entity,
+                String.class
+        );
+
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonResponse = response.getBody();
+        try {
+            JsonNode root =  mapper.readTree(jsonResponse);
+            // does data exist?
+            if (root.isArray() && root.size() > 0) {
+                // give back the first result json
+                JsonNode firstNode = root.get(0);
+                return mapper.writeValueAsString(firstNode);
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

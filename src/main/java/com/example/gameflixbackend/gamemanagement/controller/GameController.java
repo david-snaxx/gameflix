@@ -26,7 +26,7 @@ public class GameController {
      * @param gameName The name of the game to search for in the IGDB database.
      * @return The 5 closest matching games in the IGDB based on the input name.
      */
-    @RequestMapping(value = "/igdb/search/{gameName}", method = RequestMethod.GET)
+    @RequestMapping(value = "/igdb/search/name/{gameName}", method = RequestMethod.GET)
     public ResponseEntity<?> getGame(@PathVariable("gameName") String gameName) {
         try {
             IgdbSearchResult[] results = this.igdbService.searchForGames(gameName);
@@ -46,6 +46,16 @@ public class GameController {
         try {
             String jsonResponse = this.twitchAuthenticationService.getTwitchAccessToken();
             return ResponseEntity.ok(jsonResponse);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "igdb/search/id/{gameId}", method = RequestMethod.GET)
+    public ResponseEntity<?> getGameById(@PathVariable("gameId") Integer gameId) {
+        try {
+            String result = this.igdbService.getFullyDefinedGameById(gameId);
+            return ResponseEntity.ok(result);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
