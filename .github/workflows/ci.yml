@@ -1,47 +1,42 @@
-name: Spring Boot CI
+name: Spring Boot CI/CD
+
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-jobs:
-  build:
-    runs-on: ubuntu-latest
 
-    services:
-      mysql-db:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: rootpassword
-          MYSQL_DATABASE: gameflix
-          MYSQL_USER: myuser
-          MYSQL_PASSWORD: mypassword
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd "mysqladmin ping -h localhost -p$MYSQL_ROOT_PASSWORD"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+jobs:
+  build-test-and-package:
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Set up JDK 17 and Maven
-        uses: actions/setup-java@v3
+      - name: Set up JDK
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
-          cache: 'maven'
+          java-version: '21'
 
-      - name: Build with Maven
-        env:
-          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/gameflix
-          SPRING_DATASOURCE_USERNAME: myuser
-          SPRING_DATASOURCE_PASSWORD: mypassword
-          SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
-        run: mvn clean package
+      - name: Cache Maven repository
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-m2-
 
-      - name: Build Docker image
-        run: docker build -t gameflix-backend .
+      - name: Build and test with Maven
+        run: mvn -B clean test
+
+      - name: Package application
+        run: mvn -B package -DskipTests
+
+      - name: Upload jar artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: springboot-jar
+          path: |
+            target/*.jar
