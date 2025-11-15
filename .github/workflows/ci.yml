@@ -1,42 +1,47 @@
-name: Spring Boot CI/CD
-
+name: Spring Boot CI
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-
 jobs:
-  build-test-and-package:
+  build:
     runs-on: ubuntu-latest
+
+    services:
+      mysql-db:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: rootpassword
+          MYSQL_DATABASE: gameflix
+          MYSQL_USER: username
+          MYSQL_PASSWORD: pass
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd "mysqladmin ping -h localhost -p$MYSQL_ROOT_PASSWORD"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      - name: Set up JDK
-        uses: actions/setup-java@v4
+      - name: Set up JDK 17 and Maven
+        uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
+          cache: 'maven'
 
-      - name: Cache Maven repository
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-m2-
+      - name: Build with Maven
+        env:
+          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/gameflix
+          SPRING_DATASOURCE_USERNAME: username
+          SPRING_DATASOURCE_PASSWORD: pass
+          SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+        run: mvn clean package
 
-      - name: Build and test with Maven
-        run: mvn -B clean test
-
-      - name: Package application
-        run: mvn -B package -DskipTests
-
-      - name: Upload jar artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: springboot-jar
-          path: |
-            target/*.jar
+      - name: Build Docker image
+        run: docker build -t gameflix-backend .
