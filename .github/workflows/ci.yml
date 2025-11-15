@@ -1,46 +1,53 @@
 name: Spring Boot CI
 
+
+
 on:
+
   push:
+
     branches: [ main ]
+
   pull_request:
+
     branches: [ main ]
+
+
 
 jobs:
+
   build:
+
     runs-on: ubuntu-latest
+
+
+
     steps:
+
       - name: Checkout repository
+
         uses: actions/checkout@v3
 
+
+
       - name: Set up JDK 17
+
         uses: actions/setup-java@v3
+
         with:
+
           distribution: 'temurin'
+
           java-version: '17'
-          # maven dependency
-          cache: 'maven'
+
+
 
       - name: Build with Maven
-        #mysql spring local connection
-        env:
-          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/gameflix_db
-          SPRING_DATASOURCE_USERNAME: gameflix-user
-          SPRING_DATASOURCE_PASSWORD: gfdb
-          SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+
         run: mvn clean package
 
-      - name: Build Docker image
-        run: docker build -t gameflix-backend .
 
-    services:
-      #adding mysql database to the environment
-      mysql-db:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: 56synergetics
-          MYSQL_DATABASE: gameflix-db
-          MYSQL_USER: gameflix-user
-          MYSQL_PASSWORD: gfdb
-        ports:
-          - 3306:3306
+
+      - name: Build Docker image
+
+        run: docker build -t gameflix-backend .
