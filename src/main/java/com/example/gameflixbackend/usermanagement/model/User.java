@@ -31,4 +31,9 @@ public class User implements Serializable {
                 Objects.equals(username, user.username) &&
                 Objects.equals(password, user.password);
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username, password);
+    }
 }
