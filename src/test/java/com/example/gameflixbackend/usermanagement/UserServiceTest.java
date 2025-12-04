@@ -102,8 +102,8 @@ public class UserServiceTest {
     }
 
     @Test
-    @DisplayName("Given we search for a user id that is not taken, when that search request is made, then an execption" +
-            "should be thrown")
+    @DisplayName("Given we search for a user id that is not taken, when that search request is made, then an empty" +
+            "user optional should be returned")
     void findById_throwsExceptionOnUserNotFound() {
         this.userService.save(testUserOne);
         Optional<User> realUser = this.userService.findById(testUserOne.id);
