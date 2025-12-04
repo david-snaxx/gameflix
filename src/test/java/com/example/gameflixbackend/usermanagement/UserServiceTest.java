@@ -126,4 +126,23 @@ public class UserServiceTest {
         Assertions.assertTrue(users.contains(testUserOne));
         Assertions.assertTrue(users.contains(testUserTwo));
     }
+
+    @Test
+    @DisplayName("Given we change the password of an existing user and the username AND id match, when we resave that " +
+            "user, then the user information is updated in the database")
+    void save_changesPasswordGivenMatchingIds() {
+        this.userService.save(testUserOne);
+        Long testUserOneId = this.userService.findByUsername(testUserOne.username).get().id; // for confirming id later
+
+        // change the password
+        this.testUserOne.password = "thisIsANewPassword";
+        this.userService.save(testUserTwo);
+
+        User alteredTestUserOne = this.userService.findByUsername(testUserOne.username).get();
+
+        // the id didn't change so it should have allowed us to save
+        Assertions.assertEquals(testUserOneId, alteredTestUserOne.id);
+        // the new password should therefore be reflected
+        Assertions.assertEquals(testUserOne.password, "thisIsANewPassword");
+    }
 }
