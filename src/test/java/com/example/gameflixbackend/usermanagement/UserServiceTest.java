@@ -5,11 +5,13 @@ import com.example.gameflixbackend.usermanagement.service.UserService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 
+import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
@@ -34,7 +36,7 @@ public class UserServiceTest {
     }
 
     @Test
-    @Transactional
+    @DisplayName("Given user login data, when that data is saved, then that user login data should persist and be retrievable")
     void saveUser_savesNewUser() {
         this.userService.save(testUserOne);
         this.userService.save(testUserTwo);
@@ -50,7 +52,8 @@ public class UserServiceTest {
     }
 
     @Test
-    @Transactional
+    @DisplayName("Given we target a known user, when a delete by id request is made, that user should stop existing " +
+            "in storage")
     void deleteUser_deletesExistingUser() {
         this.userService.save(testUserOne);
         this.userService.save(testUserTwo);
@@ -74,7 +77,8 @@ public class UserServiceTest {
     }
 
     @Test
-    @Transactional
+    @DisplayName("Given a username has already been taken, when a new registration attempt is made with that username, " +
+            "then there should be an exception thrown")
     void saveUser_throwsExceptionOnDuplicateUser() {
         this.userService.save(testUserOne); // this is defined in setup
 
@@ -87,7 +91,8 @@ public class UserServiceTest {
     }
 
     @Test
-    @Transactional
+    @DisplayName("Given we search for a username that is not registered, when that search request is made, then an " +
+            "exception should be thrown")
     void findByUsername_throwsExceptionOnUserNotFound() {
         this.userService.save(testUserOne);
         Optional<User> realUser = this.userService.findByUsername("testUserOne");
@@ -97,7 +102,8 @@ public class UserServiceTest {
     }
 
     @Test
-    @Transactional
+    @DisplayName("Given we search for a user id that is not taken, when that search request is made, then an execption" +
+            "should be thrown")
     void findById_throwsExceptionOnUserNotFound() {
         this.userService.save(testUserOne);
         Optional<User> realUser = this.userService.findById(testUserOne.id);
@@ -105,5 +111,19 @@ public class UserServiceTest {
 
         Assertions.assertTrue(realUser.isPresent());
         Assertions.assertFalse(nonExistentUser.isPresent());
+    }
+
+    @Test
+    @DisplayName("Given we request all registered users from the database, when that request is made, we should be given" +
+            "a list containing all registered users")
+    void findAll_providesAllUsers() {
+        this.userService.save(testUserOne);
+        this.userService.save(testUserTwo);
+
+        List<User> users = this.userService.findAll();
+
+        Assertions.assertFalse(users.isEmpty());
+        Assertions.assertTrue(users.contains(testUserOne));
+        Assertions.assertTrue(users.contains(testUserTwo));
     }
 }

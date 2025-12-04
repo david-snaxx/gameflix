@@ -3,6 +3,7 @@ package com.example.gameflixbackend.usermanagement.model;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Represents all information tied to a gameflix user.
@@ -20,4 +21,14 @@ public class User implements Serializable {
 
     @Column(name = "password", nullable = false, length = 255)
     public String password;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) &&
+                Objects.equals(username, user.username) &&
+                Objects.equals(password, user.password);
+    }
 }
