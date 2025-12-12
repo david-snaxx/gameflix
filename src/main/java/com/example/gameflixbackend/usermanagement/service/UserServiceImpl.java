@@ -45,4 +45,13 @@ public class UserServiceImpl implements UserService {
     public List<User> findAll() {
         return this.userRepository.findAll();
     }
+
+    /**
+     * Checks to see if the input username exists in the database.
+     * @param username The username to search for.
+     * @return {@code true} if the username is in the database OR {@code false} if the username is not taken.
+     */
+    public boolean isUsernamePresent(String username) {
+        return this.userRepository.existsByUsername(username);
+    }
 }

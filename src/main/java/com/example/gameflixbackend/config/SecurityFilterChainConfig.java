@@ -29,6 +29,16 @@ public class SecurityFilterChainConfig {
                         .requestMatchers(HttpMethod.POST, "/games/add/igdb/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/games/delete/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/games/get/**").permitAll()
+
+                        .requestMatchers(
+                                "/",
+                                "/css/**",
+                                "/js/**",
+                                "/error",
+                                "/register",
+                                "/register-success"
+                        ).permitAll()
+
                         .anyRequest().authenticated()
                 );
         return http.build();

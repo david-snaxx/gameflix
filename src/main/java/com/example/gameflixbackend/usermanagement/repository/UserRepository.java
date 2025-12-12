@@ -18,4 +18,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
      */
     @Query("SELECT x FROM User x WHERE x.username = :username")
     Optional<User> findByUsername(@Param("username") String username);
+
+    /**
+     * True/false for determining if a username is already taken.
+     * @param username The username to query against the database.
+     * @return {@code true} if the username is taken OR {@code false} if the username is not taken yet.
+     */
+    boolean existsByUsername(String username);
 }

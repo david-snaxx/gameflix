@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gameflix :: Create an account</title>
+</head>
+<body>
+    <h2>Create a new Gameflix account</h2>
+    <form action="#" th:action="@{/register}" th:object="${user}" method="post">
+        <div>
+            <label>Username:
+                <input type="text" th:field="*{username}">
+            </label>
+        </div>
+        <div>
+            <label>Password:
+                <input type="password" th:field="*{password}">
+            </label>
+        </div>
+        <div>
+            <button type="submit">Create account</button>
+        </div>
+    </form>
+</body>
+</html>
