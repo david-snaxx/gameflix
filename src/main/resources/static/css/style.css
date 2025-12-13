@@ -1,0 +1,142 @@
+body {
+    background:
+            radial-gradient(circle at bottom left, #975b14, transparent 35%),
+            radial-gradient(circle at top right, #1e3c72, #000000 60%);
+    background-size: 120% 120%;
+    animation: contentFade 0.8s ease-out;
+    min-height: 100vh;
+    margin: 0;
+    color: #ffffff;
+    font-family: sans-serif;
+
+}
+
+/*adds slow continual motion to the glowing colors of the background*/
+@keyframes backgroundMove {
+    0% {
+        background-position: 0 0;
+        background-size: 120% 120%;
+    }
+    100% {
+        background-position: 100% 100%;
+        background-size: 130% 130%;
+    }
+}
+
+h1, h2, h3 {
+    text-align: center;
+}
+
+@keyframes contentFade {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/*basic styling for most containers of content on the website that aren't images*/
+.glassy-container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    padding: 2rem;
+    margin: 2rem;
+    color: white;
+}
+
+/*intended for input text boxes atop glassy-container divs*/
+.glassy-input {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 10px;
+    color: white;
+    outline: none;
+}
+
+.glassy-input:focus {
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+/*general button styles, should be paired with button-primary/button-danger accordingly*/
+.glassy-button {
+    display: inline-block;
+    padding: 10px 18px;
+    font-size: 1rem;
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.glassy-button:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+.glassy-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+.button-primary {
+    background: linear-gradient(135deg, rgba(30, 60, 114, 0.6), rgba(42, 82, 152, 0.6));
+    box-shadow: 0 4px 15px rgba(30, 60, 114, 0.3);
+}
+
+.button-primary:hover {
+    background: linear-gradient(135deg, rgba(30, 60, 114, 0.8), rgba(42, 82, 152, 0.8));
+    box-shadow: 0 0 20px rgba(42, 82, 152, 0.6); /* Blue Neon Glow */
+}
+
+.button-danger {
+    background: linear-gradient(135deg, rgba(220, 36, 36, 0.6), rgba(71, 16, 16, 0.6));
+    box-shadow: 0 4px 15px rgba(220, 36, 36, 0.3);
+}
+
+.button-danger:hover {
+    background: linear-gradient(135deg, rgba(220, 36, 36, 0.8), rgba(71, 16, 16, 0.8));
+    box-shadow: 0 0 20px rgba(220, 36, 36, 0.6); /* Red Neon Glow */
+}
+
+/*utility space between items vertically*/
+.flex-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/*utility space between items horizontally*/
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+}
+
+a {
+    color: #4facfe;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+a:visited {
+    color: #4facfe;
+}
+
+a:hover {
+    color: #00f2fe;
+}

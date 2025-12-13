@@ -6,6 +6,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -34,12 +35,28 @@ public class SecurityFilterChainConfig {
                                 "/",
                                 "/css/**",
                                 "/js/**",
+                                "/images/**",
                                 "/error",
                                 "/register",
-                                "/register-success"
+                                "/register-success",
+                                "login",
+                                "add-game"
                         ).permitAll()
 
                         .anyRequest().authenticated()
+                )
+                // configuring the login page
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/", true)
+                        .permitAll()
+                )
+                // configuring logout behavior
+                .logout(logout -> logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                        .logoutSuccessUrl("/login?logout")
+                        .permitAll()
                 );
         return http.build();
     }

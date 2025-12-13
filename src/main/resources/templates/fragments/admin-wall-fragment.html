@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Gameflix</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div th:fragment="admin-wall">
+        <div sec:authorize="hasRole('USER')">
+            <a th:href="@{/}">Return home</a>
+        </div>
+
+        <div sec:authorize="!isAuthenticated()">
+            <p>You must be logged in to view this page.</p>
+            <a th:href="@{/login}">Login</a>
+        </div>
+    </div>
+</body>
+</html>

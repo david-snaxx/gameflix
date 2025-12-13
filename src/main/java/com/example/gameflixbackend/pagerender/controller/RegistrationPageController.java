@@ -5,6 +5,7 @@ import com.example.gameflixbackend.usermanagement.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,13 +23,18 @@ public class RegistrationPageController {
     }
 
     @PostMapping("/register")
-    public String submitRegistrationForm(@ModelAttribute User user) {
-        try {
-            this.userService.save(user);
-            return "redirect:/register-success";
-        } catch (Exception e) {
-            return "redirect:/register-failure";
+    public String submitRegistrationForm(@ModelAttribute User user, BindingResult result) {
+        if (this.userService.isUsernamePresent(user.getUsername())) {
+            result.rejectValue("username", "error.userername", "Username already taken.");
         }
+
+        if (result.hasErrors()) {
+            return "register";
+        }
+
+        // valid account details
+        this.userService.save(user);
+        return "redirect:/register-success";
 
     }
 

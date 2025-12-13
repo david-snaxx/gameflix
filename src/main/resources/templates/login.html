@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Gameflix :: Login</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <h2>Gameflix login</h2>
+
+    <div sec:authorize="!isAuthenticated()" class="glassy-container">
+        <div th:if="${param.error}" style="color: red;">
+            Invalid username or password.
+        </div>
+
+        <div th:if="${param.logout}" style="color: green;">
+            You have been logged out.
+        </div>
+
+        <form th:action="@{/login}" method="post" class="flex-col">
+            <div>
+                <label>Username:
+                    <input type="text" name="username" required class="glassy-input" />
+                </label>
+            </div>
+
+            <div>
+                <label>Password:
+                    <input type="text" name="password" required class="glassy-input" />
+                </label>
+            </div>
+
+            <button type="submit" class="glassy-button button-primary">Sign In</button>
+        </form>
+
+        <p>Don't have an account? <a th:href="@{/register}">Register here</a></p>
+    </div>
+
+    <div sec:authorize="isAuthenticated()">
+        <p>You're already logged in <span sec:authentication="name">User</span>!</p>
+        <br>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="glassy-button">Logout</button>
+        </form>
+    </div>
+</body>
+</html>

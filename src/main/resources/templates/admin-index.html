@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Gameflix :: Admin</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div sec:authorize="hasRole('ADMIN')">
+        <h2>Gameflix Web Administration</h2>
+        <p>Welcome back, <span sec:authentication="name">User</span>.</p>
+    </div>
+
+    <div th:replace="~{fragments/admin-wall-fragment}"></div>
+</body>
+</html>

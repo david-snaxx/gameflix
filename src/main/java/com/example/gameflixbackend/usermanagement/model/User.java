@@ -22,6 +22,9 @@ public class User implements Serializable {
     @Column(name = "password", nullable = false, length = 255)
     public String password;
 
+    @Column(name = "isAdmin", nullable = false)
+    public Boolean isAdmin = false;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -59,5 +62,13 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Boolean getAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        isAdmin = admin;
     }
 }
