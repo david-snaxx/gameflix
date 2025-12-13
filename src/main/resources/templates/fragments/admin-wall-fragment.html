@@ -9,7 +9,7 @@
 </head>
 <body>
     <div th:fragment="admin-wall">
-        <div sec:authorize="hasRole('USER')">
+        <div sec:authorize="!hasRole('ADMIN')">
             <a th:href="@{/}">Return home</a>
         </div>
 

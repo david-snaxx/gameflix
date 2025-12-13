@@ -6,6 +6,8 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
+    <div th:replace="~{fragments/navbar-fragment}"></div>
+
     <h2>Success! Your account has been registered.</h2>
     <p>You can now <a th:href="@{/login}">login here</a>.</p>
 </body>

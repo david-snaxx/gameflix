@@ -110,6 +110,15 @@ public class IgdbService {
     }
 
     /**
+     * Handles lists to prevent null access during streams.
+     * @param list The list that may or may not be null.
+     * @return A guaranteed list object that will simply be empty if the list was null.
+     */
+    private <T> List<T> handleList(List<T> list) {
+        return list == null ? new ArrayList<>() : list;
+    }
+
+    /**
      * Transforms a {@link IgdbGame} into an {@link Game}.
      * Game objects are fully defined game metadata objects (i.e. full text instead of id based) and
      * are ready for storage in the database.
@@ -145,19 +154,19 @@ public class IgdbService {
                 igdbGame.storyline,
                 igdbGame.firstReleaseDate,
                 fullAgeRatings,
-                igdbGame.alternativeNames.stream().map(IgdbGame.SimpleReference::getName).toList(),
-                igdbGame.artworks.stream().map(IgdbGame.ImageInfo::getUrl).toList(),
-                igdbGame.cover.url,
-                igdbGame.expansions.stream().map(IgdbGame.SimpleReference::getName).toList(),
-                igdbGame.genres.stream().map(IgdbGame.SimpleReference::getName).toList(),
+                this.handleList(igdbGame.alternativeNames).stream().map(IgdbGame.SimpleReference::getName).toList(),
+                this.handleList(igdbGame.artworks).stream().map(IgdbGame.ImageInfo::getUrl).toList(),
+                igdbGame.cover != null ? igdbGame.cover.url : null,
+                this.handleList(igdbGame.expansions).stream().map(IgdbGame.SimpleReference::getName).toList(),
+                this.handleList(igdbGame.genres).stream().map(IgdbGame.SimpleReference::getName).toList(),
                 fullDevelopers,
                 fullPublishers,
-                igdbGame.keywords.stream().map(IgdbGame.SimpleReference::getName).toList(),
-                igdbGame.platforms.stream().map(IgdbGame.SimpleReference::getName).toList(),
-                igdbGame.screenshots.stream().map(IgdbGame.ImageInfo::getUrl).toList(),
-                igdbGame.themes.stream().map(IgdbGame.SimpleReference::getName).toList(),
-                igdbGame.videos.stream().map(IgdbGame.Video::getVideoId).toList(),
-                igdbGame.websites.stream().map(IgdbGame.Website::getUrl).toList()
+                this.handleList(igdbGame.keywords).stream().map(IgdbGame.SimpleReference::getName).toList(),
+                this.handleList(igdbGame.platforms).stream().map(IgdbGame.SimpleReference::getName).toList(),
+                this.handleList(igdbGame.screenshots).stream().map(IgdbGame.ImageInfo::getUrl).toList(),
+                this.handleList(igdbGame.themes).stream().map(IgdbGame.SimpleReference::getName).toList(),
+                this.handleList(igdbGame.videos).stream().map(IgdbGame.Video::getVideoId).toList(),
+                this.handleList(igdbGame.websites).stream().map(IgdbGame.Website::getUrl).toList()
         );
     }
 }

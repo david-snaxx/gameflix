@@ -7,9 +7,14 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
+    <div th:replace="~{fragments/navbar-fragment}"></div>
+
     <div sec:authorize="hasRole('ADMIN')">
         <h2>Gameflix Web Administration</h2>
-        <p>Welcome back, <span sec:authentication="name">User</span>.</p>
+
+        <form th:action="@{/admin/igdb-search}" class="glassy-container flex-col">
+            <button type="submit" class="glassy-button button-primary">IGDB Search</button>
+        </form>
     </div>
 
     <div th:replace="~{fragments/admin-wall-fragment}"></div>

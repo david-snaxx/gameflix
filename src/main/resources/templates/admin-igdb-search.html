@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
@@ -7,6 +8,58 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
+    <div th:replace="~{fragments/navbar-fragment}"></div>
 
+    <h2>Internet Games Database Search</h2>
+
+    <div class="glassy-container">
+        <form th:action="@{/admin/igdb-search}" method="get">
+            <input type="text" name="query" th:value="${query}" placeholder="Enter game name..." class="glassy-input"/>
+            <button type="submit" class="glassy-button button-primary">Search</button>
+        </form>
+    </div>
+
+    <div th:if="${param.success}" style="color: green;" class="glassy-container">
+        <span th:text="${param.query}"></span> added to Gameflix.
+    </div>
+
+    <div th:if="${param.error != null and param.error[0] == 'duplicate'}" class="glassy-container">
+        <span th:text="${param.query}"></span> is already in the database.
+    </div>
+
+    <div th:if="${param.error != null and param.error[0] == 'generic'}" class="glassy-container">
+        Error querying IGDB.
+    </div>
+
+    <!--game search results-->
+    <div th:if="${searchResults != null}" class="glassy-container">
+        <h3>Search results</h3>
+        <hr>
+        <table>
+            <thead>
+            <tr>
+                <th>Game Name</th>
+                <th>Summary</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="game : ${searchResults}">
+                <td th:text="${game.name}">Game Name</td>
+                <td th:text="${#strings.abbreviate(game.summary, 100)}">Summary</td>
+                <td>
+                    <form th:action="@{/admin/igdb-search/add}" method="post">
+                        <input type="hidden" name="igdbId" th:value="${game.id}" class="glassy-input"/>
+                        <button type="submit" class="glassy-button button-primary">Add to database</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${searchResults != null and #lists.isEmpty(searchResults)}" class="glassy-container">
+        <p>No games found.</p>
+    </div>
 </body>
 </html>

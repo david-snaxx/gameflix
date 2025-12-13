@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
@@ -7,12 +8,15 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
+    <div th:replace="~{fragments/navbar-fragment}"></div>
+
     <h2>Create a new Gameflix account</h2>
-    <div sec:authorize="!isAuthenticated()">
-        <form action="#" th:action="@{/register}" th:object="${user}" method="post">
+
+    <div sec:authorize="!isAuthenticated()" class="glassy-container">
+        <form action="#" th:action="@{/register}" th:object="${user}" method="post" class="flex-col">
             <div>
                 <label>Username:
-                    <input type="text" th:field="*{username}">
+                    <input type="text" th:field="*{username}" class="glassy-input">
                 </label>
                 <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" style="color: red;">
                     Username error
@@ -20,21 +24,21 @@
             </div>
             <div>
                 <label>Password:
-                    <input type="text" th:field="*{password}">
+                    <input type="text" th:field="*{password}" class="glassy-input">
                 </label>
             </div>
             <div>
-                <button type="submit">Create account</button>
+                <button type="submit" class="glassy-button button-primary">Create account</button>
             </div>
         </form>
     </div>
 
-    <div sec:authorize="isAuthenticated()">
+    <div sec:authorize="isAuthenticated()" class="glassy-container">
         <p>You can't make an account while logged in <span sec:authentication="name">User</span>!</p>
         <p>If you'd like to make a new account, please log out first.</p>
         <br>
         <form th:action="@{/logout}" method="post">
-            <button type="submit">Logout</button>
+            <button type="submit" class="glassy-button button-danger">Logout</button>
         </form>
     </div>
 </body>
