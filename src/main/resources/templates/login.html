@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
+    <div th:replace="~{fragments/navbar-fragment}"></div>
     <h2>Gameflix login</h2>
 
     <div sec:authorize="!isAuthenticated()" class="glassy-container">
@@ -34,7 +36,7 @@
             <button type="submit" class="glassy-button button-primary">Sign In</button>
         </form>
 
-        <p>Don't have an account? <a th:href="@{/register}">Register here</a></p>
+        <p>Don't have an account? <button th:href="@{/register}" class="glassy-button" style="width: 10rem">Register here</button></p>
     </div>
 
     <div sec:authorize="isAuthenticated()">

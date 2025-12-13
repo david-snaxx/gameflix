@@ -25,6 +25,9 @@ public class User implements Serializable {
     @Column(name = "isAdmin", nullable = false)
     public Boolean isAdmin = false;
 
+    @Column(name = "isSubscribed", nullable = false)
+    public Boolean isSubscribed = false;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -70,5 +73,13 @@ public class User implements Serializable {
 
     public void setAdmin(Boolean admin) {
         isAdmin = admin;
+    }
+
+    public Boolean getSubscribed() {
+        return isSubscribed;
+    }
+
+    public void setSubscribed(Boolean subscribed) {
+        isSubscribed = subscribed;
     }
 }
