@@ -6,10 +6,12 @@ import com.example.gameflixbackend.gamemanagement.repository.GameRepository;
 import com.example.gameflixbackend.gamemanagement.service.IgdbService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
 import java.util.Objects;
 
 @Controller
@@ -50,5 +52,21 @@ public class AdminPageController {
             return "redirect:/admin/igdb-search?success=true&query=" + game.name;
         }
         return "redirect:/admin/igdb-search?error=generic";
+    }
+
+    @GetMapping("/admin/all-games")
+    public String renderAllGamesPage(Model model) {
+        List<Game> games = this.gameRepository.findAll();
+        model.addAttribute(games);
+        return "admin-game-list";
+    }
+
+    @PostMapping("admin/all-games/delete")
+    public String removeGameFromDatabase(@RequestParam("gameName") String gameName) {
+        Game toDelete = this.gameRepository.findByName(gameName);
+        if (Objects.nonNull(toDelete)) {
+            this.gameRepository.delete(toDelete);
+        }
+        return "redirect:/admin/all-games";
     }
 }

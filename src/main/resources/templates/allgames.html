@@ -1,11 +1,8 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Gameflix :: Admin :: Game Database List</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <title>Gameflix :: All Games</title>
 </head>
 <body>
     <div th:replace="~{fragments/navbar-fragment}"></div>
@@ -26,9 +23,9 @@
                 <td th:text="${game.name}">Game Name</td>
                 <td th:text="${#strings.abbreviate(game.summary, 100)}">Summary</td>
                 <td>
-                    <form th:action="@{/admin/all-games/delete}" method="post">
-                        <input type="hidden" name="gameName" th:value="${game.name}" class="glassy-input"/>
-                        <button type="submit" class="glassy-button button-danger">Delete</button>
+                    <form th:action="@{/games/details/{id}(id=${game.id})}" method="get">
+                        <input type="hidden" name="id" th:value="${game.id}" class="glassy-input"/>
+                        <button type="submit" class="glassy-button button-primary">View</button>
                     </form>
                 </td>
             </tr>

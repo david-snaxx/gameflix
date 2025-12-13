@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface GameRepository extends JpaRepository<Game,Long> {
 
     boolean existsByName(String name);
+
+    Game findByName(String name);
 }
