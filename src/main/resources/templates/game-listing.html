@@ -41,7 +41,7 @@
     </div>
 
     <!--not subscribed user rental section-->
-    <div sec:authorize="isAuthenticated() && !hasRole('SUBSCRIBER')" class="glassy-container" style="text-align: center; border: 1px solid red; margin-bottom: 2rem;">
+    <div sec:authorize="isAuthenticated() && !hasRole('SUBSCRIBER')" class="glassy-container" style="text-align: center; border: 1px solid red;">
 
         <h3 style="color: red; margin-top: 0;">Unlock Access</h3>
         <p>You must be subscribed to GameFlix plus to rent this game.</p>
@@ -51,7 +51,8 @@
         </a>
     </div>
 
-    <div sec:authorize="!isAuthenticated()" class="glassy-container" style="text-align: center; border: 1px solid red; margin-bottom: 2rem;">
+    <!--guests are informed they need an account-->
+    <div sec:authorize="!isAuthenticated()" class="glassy-container" style="text-align: center; border: 1px solid red;">
 
         <h3 style="color: red; margin-top: 0;">Join GameFlix to Unlock Access</h3>
         <p>Create an account to rent this game and many others.</p>
@@ -64,7 +65,18 @@
                 Sign Up
             </a>
         </div>
+    </div>
 
+    <!--subscribed users can rent-->
+    <div sec:authorize="hasRole('SUBSCRIBER')" class="glassy-container" style="text-align: center; border: 1px solid blue">
+        <h3 style="color: #4facfe;">Rent this Game</h3>
+        <p>As a subscriber, you can rent up to 2 games at a time.</p>
+        <form th:action="@{/games/rent}" method="post">
+            <input type="hidden" name="gameId" th:value="${game.id}" />
+            <button type="submit" class="glassy-button button-primary" style="text-decoration: none;">
+                Rent Now
+            </button>
+        </form>
     </div>
 
     <!--game summary-->
