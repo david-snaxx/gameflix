@@ -28,6 +28,20 @@ public class User implements Serializable {
     @Column(name = "isSubscribed", nullable = false)
     public Boolean isSubscribed = false;
 
+    @Column(name = "street_address")
+    public String streetAddress;
+
+    @Column(name = "city_address")
+    public String cityAddress;
+
+    @Column(name = "zip_address")
+    public String zipAddress;
+
+    @Column(name = "phone_number")
+    public String phoneNumber;
+
+    @Column
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -81,5 +95,37 @@ public class User implements Serializable {
 
     public void setSubscribed(Boolean subscribed) {
         isSubscribed = subscribed;
+    }
+
+    public String getStreetAddress() {
+        return streetAddress;
+    }
+
+    public void setStreetAddress(String streetAddress) {
+        this.streetAddress = streetAddress;
+    }
+
+    public String getCityAddress() {
+        return cityAddress;
+    }
+
+    public void setCityAddress(String cityAddress) {
+        this.cityAddress = cityAddress;
+    }
+
+    public String getZipAddress() {
+        return zipAddress;
+    }
+
+    public void setZipAddress(String zipAddress) {
+        this.zipAddress = zipAddress;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

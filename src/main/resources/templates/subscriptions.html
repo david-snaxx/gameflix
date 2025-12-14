@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Gameflix :: Subscribe</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        body {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="~{fragments/navbar-fragment}"></div>
+
+    <div th:if="${!isSubscribed}">
+
+        <h1>Upgrade to GameFlix Plus</h1>
+
+        <div class="flex-row">
+            <div class="glassy-container" style="flex: 1; min-width: 300px;">
+                <h3>Order Summary</h3>
+                <hr>
+                <div class="flex-row">
+                    <h3>GameFlix Plus</h3>
+                    <h3>$9.99 / mo</h3>
+                </div>
+                <ul style="text-align: left">
+                    <li>Rent up to two games at any time</li>
+                    <li>Access to a continually growing library</li>
+                    <li>Extend rental access as many times as you wish</li>
+                </ul>
+                <hr>
+                <div class="flex-row">
+                    <span>Total due today:</span>
+                    <span style="font-size: 1.5rem; color: green;">$9.99</span>
+                </div>
+            </div>
+
+            <div class="glassy-container" style="min-width: 350px;">
+                <h3>Payment Details</h3>
+                <hr>
+                <form th:action="@{/subscribe/checkout}" method="post" class="flex-col">
+                    <label>Name on Card
+                        <input type="text" name="cardName" class="glassy-input" placeholder="John Doe" required>
+                    </label>
+
+                    <label>Card Number
+                        <input type="text" name="cardNumber" class="glassy-input" placeholder="0000 0000 0000 0000" minlength="12" required>
+                    </label>
+
+                    <label>Expiry
+                        <input type="text" name="cardExpiry" class="glassy-input" placeholder="MM / YY" maxlength="5" required>
+                    </label>
+
+                    <label>CVC
+                        <input type="text" class="glassy-input" placeholder="123" maxlength="3" required>
+                    </label>
+
+                    <button type="submit" class="glassy-button button-primary">
+                        Pay $9.99 & Subscribe
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${isSubscribed}" class="glassy-input">
+        <h1 style="color: #4facfe;">You are a Premium Member!</h1>
+        <p style="font-size: 1.2rem; color: #ccc; max-width: 600px; margin: 1rem auto;">
+            Thank you for supporting GameFlix. You currently have access to all premium features.
+        </p>
+
+        <div class="glassy-container" style="display: inline-block; min-width: 300px;">
+            <h4>Current Plus Plan</h4>
+            <hr>
+            <p>Status: <span style="color: lightgreen;">Active</span></p>
+            <p>Next Billing: Jan 13, 2026</p>
+        </div>
+
+        <h3>Finished?</h3>
+        <p style="font-size: 0.9rem;">If you cancel, you will lose access to premium features immediately.</p>
+        <form th:action="@{/subscribe/unsubscribe}" method="post">
+            <button type="submit" class="glassy-button button-danger">
+                Cancel Subscription
+            </button>
+        </form>
+    </div>
+</body>
+</html>

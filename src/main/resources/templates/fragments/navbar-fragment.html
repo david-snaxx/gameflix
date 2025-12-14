@@ -13,13 +13,14 @@
         <a th:href="@{/}" class="nav-brand">
             <span style="color: #975b14">Game</span>
             <span style="color: #1e3c72">Flix</span>
-            <span sec:authorize="hasRole('SUBSCRIBER')" class="nav-brand" style="color: white !important;">Plus</span>
-            <span sec:authorize="hasRole('ADMIN')" class="nav-brand" style="color: darkred !important;"> ADMIN </span>
+            <span sec:authorize="hasRole('SUBSCRIBER')" class="nav-brand" style="color: white !important; font-size: 0.5rem;">Plus</span>
+            <span sec:authorize="hasRole('ADMIN')" class="nav-brand" style="color: darkred !important; font-size: 0.5rem;"> ADMIN </span>
         </a>
 
         <div class="nav-links">
             <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin}">Admin Panel</a>
             <a th:href="@{/games/all}">Browse Games</a>
+            <a th:href="@{/subscribe}">Subscribe</a>
 
             <!--show login & register for logged out users-->
             <div sec:authorize="!isAuthenticated()" class="flex-row">

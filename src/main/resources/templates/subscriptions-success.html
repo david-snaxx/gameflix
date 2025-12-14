@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Gameflix :: Subscription Updated</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div th:replace="~{fragments/navbar-fragment}"></div>
+
+    <div class="glassy-container">
+        <p>Your subscription has been updated. Please log out and back in before continuing to use GameFlix.</p>
+        <form th:action="@{/logout}" method="post" style="margin: 0;">
+            <button type="submit" class="glassy-button button-danger" style="padding: 8px 16px; font-size: 0.9rem;">
+                Logout
+            </button>
+        </form>
+    </div>
+</body>
+</html>
