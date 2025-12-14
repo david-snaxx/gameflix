@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Gameflix :: Manage Rentals</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div th:replace="~{fragments/navbar-fragment}"></div>
+
+    <h1>Manage Rentals</h1>
+    <p style="text-align: center">
+        Here you can initiate returns on currently rented games so you can get to playing something new.
+        Or, check out what you've played in the past.
+    </p>
+    <br>
+
+    <h3>Active Rentals</h3>
+    <div class="glassy-container">
+        <p th:if="${#lists.isEmpty(currentRentals)}">You have no active rentals.</p>
+
+        <div th:each="game : ${currentRentals}"
+             style="display: flex; gap: 20px; align-items: center; padding-bottom: 20px;">
+
+            <img th:if="${game.coverUrl}"
+                 th:src="${game.coverUrl.startsWith('//') ? 'https:' + game.coverUrl : game.coverUrl}"
+                 style="width: 80px; border-radius: 8px;">
+            <div style="flex: 1;">
+                <h4 th:text="${game.name}">Game Title</h4>
+            </div>
+
+            <div style="display: flex;">
+                <a th:href="@{/games/details/{id}(id=${game.id})}" class="glassy-button">
+                    View
+                </a>
+                <form th:action="@{/games/return}" method="post">
+                    <input type="hidden" name="gameId" th:value="${game.id}">
+                    <button type="submit" class="glassy-button button-danger">
+                        Return Game
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <h3>Rental History</h3>
+    <div class="glassy-container" style="padding: 20px;">
+        <p th:if="${#lists.isEmpty(historicalRentals)}">No history found.</p>
+
+        <div th:each="game : ${historicalRentals}"
+             style="display: flex; gap: 20px; align-items: center; margin-bottom: 15px;">
+
+            <img th:if="${game.coverUrl}"
+                 th:src="${game.coverUrl.startsWith('//') ? 'https:' + game.coverUrl : game.coverUrl}"
+                 style="width: 60px; border-radius: 6px;">
+
+            <div style="flex: 1;">
+                <h4 th:text="${game.name}">Game Title</h4>
+            </div>
+
+            <a th:href="@{/games/details/{id}(id=${game.id})}" class="glassy-button">View</a>
+        </div>
+
+    </div>
+</body>
+</html>

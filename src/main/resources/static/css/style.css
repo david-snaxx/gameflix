@@ -106,7 +106,3 @@ a {
     font-weight: 600;
     transition: all 0.2s ease;
 }
-
-a:visited {
-    color: #4facfe;
-}
