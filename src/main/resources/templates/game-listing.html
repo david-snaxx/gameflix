@@ -10,120 +10,89 @@
 <body>
     <div th:replace="~{fragments/navbar-fragment}"></div>
 
-    <div style="max-width: 1200px; margin: 40px auto; padding: 0 20px;">
+    <h1 th:text="${game.name}">GameTitle</h1>
 
-        <div class="glassy-container flex-row" style="align-items: flex-start; gap: 2rem;">
+    <div class="glassy-container" style="display: flex; gap: 20px; align-items: flex-start;">
+        <img th:if="${game.coverUrl}"
+             th:src="${game.coverUrl.startsWith('//') ? 'https:' + game.coverUrl : game.coverUrl}"
+             alt="Cover Art"
+             style="width: 250px; border-radius: 12px;">
 
-            <img th:if="${game.coverUrl}"
-                 th:src="${game.coverUrl.startsWith('//') ? 'https:' + game.coverUrl : game.coverUrl}"
-                 alt="Cover Art"
-                 style="width: 250px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-
-            <div class="flex-col" style="flex: 1;">
-
-                <div>
-                    <h1 th:text="${game.name}" style="margin: 0; font-size: 3rem; text-shadow: 0 0 10px rgba(79, 172, 254, 0.5);">Game Title</h1>
-                    <p style="color: #aaa; margin-top: 0.5rem;">
-                        Released:
-                        <span th:text="${#dates.format(new java.util.Date(game.firstReleaseDate * 1000), 'MMMM d, yyyy')}">Date</span>
-                    </p>
-                </div>
-
-                <div class="flex-row gap-small" style="flex-wrap: wrap;">
-                    <strong style="color: #4facfe;">Developers:</strong>
-                    <span th:each="dev, iter : ${game.developers}">
-                            <span th:text="${dev}">Dev Name</span><span th:if="${!iter.last}">, </span>
-                        </span>
-                </div>
-
-                <div class="flex-row gap-small" style="flex-wrap: wrap;">
-                    <strong style="color: #4facfe;">Publishers:</strong>
-                    <span th:each="pub, iter : ${game.publishers}">
-                            <span th:text="${pub}">Pub Name</span><span th:if="${!iter.last}">, </span>
-                        </span>
-                </div>
-
-                <div style="margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                        <span th:each="genre : ${game.genres}" class="badge-pill">
-                            <span th:text="${genre}">Genre</span>
-                        </span>
-                </div>
-
-                <div style="margin-top: 2rem;">
-                    <a th:if="${!#lists.isEmpty(game.websiteUrls)}"
-                       th:href="${game.websiteUrls[0]}"
-                       target="_blank"
-                       class="glass-btn">
-                        Visit Official Website
-                    </a>
-                    <a th:href="@{/}" class="glass-btn btn-danger" style="margin-left: 10px;">Back</a>
-                </div>
-
-            </div>
+        <div>
+            <p style="color: #888888">Released</p>
+            <span th:text="${#dates.format(new java.util.Date(game.firstReleaseDate * 1000), 'MMMM d, yyyy')}">Date</span>
+            <hr>
+            <p style="color: #888888">Developers</p>
+            <span th:each="dev, iter : ${game.developers}">
+                <span th:text="${dev}">Dev Name</span><span th:if="${!iter.last}">, </span>
+            </span>
+            <hr>
+            <p style="color: #888888">Publishers</p>
+            <span th:each="pub, iter : ${game.publishers}">
+                <span th:text="${pub}">Pub Name</span><span th:if="${!iter.last}">, </span>
+            </span>
+            <hr>
+            <p style="color: #888888">Genres</p>
+            <span th:each="genre : ${game.genres}">
+                <span th:text="${genre}">Genre</span>
+            </span>
         </div>
+    </div>
 
-        <div class="glassy-container" style="margin-top: 2rem;">
-            <h3>Summary</h3>
-            <p th:text="${game.summary}" style="line-height: 1.6; color: #ddd;"></p>
+    <!--game summary-->
+    <div class="glassy-container">
+        <h3>Summary</h3>
+        <p th:text="${game.summary}"></p>
+    </div>
+
+    <!--game tags-->
+    <div class="glassy-container">
+        <h3>Tags</h3>
+        <div class="glassy-container">
+            <h4>Platforms</h4>
+            <ul>
+                <li th:each="plat : ${game.platforms}" th:text="${plat}">Platform</li>
+            </ul>
         </div>
-
-        <div class="glassy-container" style="margin-top: 2rem;">
-            <div class="flex-row" style="flex-wrap: wrap; justify-content: space-between; align-items: flex-start;">
-
-                <div style="flex: 1; min-width: 250px;">
-                    <h4 style="color: #4facfe;">Platforms</h4>
-                    <ul style="padding-left: 20px;">
-                        <li th:each="plat : ${game.platforms}" th:text="${plat}">Platform</li>
-                    </ul>
-                </div>
-
-                <div style="flex: 1; min-width: 250px;">
-                    <h4 style="color: #4facfe;">Age Ratings</h4>
-                    <ul style="padding-left: 20px;">
-                        <li th:each="rating : ${game.ageRatings}" th:text="${rating}">Rating</li>
-                    </ul>
-                </div>
-
-                <div style="flex: 1; min-width: 250px;">
-                    <h4 style="color: #4facfe;">Themes</h4>
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                            <span th:each="theme : ${game.themes}"
-                                  style="font-size: 0.8rem; border: 1px solid #555; padding: 2px 8px; border-radius: 4px;">
-                                <span th:text="${theme}">Theme</span>
-                            </span>
-                    </div>
-                </div>
-
-            </div>
+        <div class="glassy-container">
+            <h4>Age Ratings</h4>
+            <ul>
+                <li th:each="rating : ${game.ageRatings}" th:text="${rating}">Rating</li>
+            </ul>
         </div>
-
-        <div th:if="${!#lists.isEmpty(game.screenshotUrls)}" style="margin-top: 3rem;">
-            <h2>Screenshots</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem;">
-                <div th:each="screen : ${game.screenshotUrls}" class="glassy-container" style="padding: 0.5rem;">
-                    <img th:src="${screen.startsWith('//') ? 'https:' + screen : screen}"
-                         style="width: 100%; height: auto; border-radius: 8px; display: block;"
-                         loading="lazy" />
-                </div>
-            </div>
+        <div class="glassy-container">
+            <h4>Themes</h4>
+            <ul>
+                <li th:each="theme : ${game.themes}" th:text="${theme}">Theme</li>
+            </ul>
         </div>
+    </div>
 
-        <div th:if="${!#lists.isEmpty(game.videoUrls)}" style="margin-top: 3rem; margin-bottom: 50px;">
-            <h2>Videos</h2>
-            <div style="display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 1rem;">
-                <div th:each="videoId : ${game.videoUrls}" style="flex: 0 0 400px;">
-                    <iframe width="100%" height="225"
-                            th:src="'https://www.youtube.com/embed/' + ${videoId}"
-                            title="YouTube video player"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen
-                            style="border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.5);">
-                    </iframe>
-                </div>
-            </div>
+    <!--screenshots-->
+    <div th:if="${!#lists.isEmpty(game.screenshotUrls)}" class="glassy-container">
+        <h2>Screenshots</h2>
+        <div style="display: flex; gap: 15px; overflow-x: auto; padding-bottom: 15px;">
+            <img th:each="screen : ${game.screenshotUrls}"
+                 th:src="${screen.startsWith('//') ? 'https:' + screen : screen}"
+                 style="height: 200px; width: auto; border-radius: 10px; flex-shrink: 0;"
+                 loading="lazy"
+            />
         </div>
+    </div>
 
+    <!--video-->
+    <div th:if="${!#lists.isEmpty(game.videoUrls)}" class="glassy-container">
+        <h2>Videos</h2>
+        <div style="display: flex; gap: 15px; overflow-x: auto; padding-bottom: 15px;">
+            <iframe th:each="videoId : ${game.videoUrls}"
+                    width="400" height="225"
+                    th:src="'https://www.youtube.com/embed/' + ${videoId}"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                    style="border: none; border-radius: 12px;">
+            </iframe>
+
+        </div>
     </div>
 </body>
 </html>

@@ -13,7 +13,7 @@
     </style>
 </head>
 <body>
-    <div th:replace="~{fragments/navbar-fragment}"></div>
+<div th:replace="~{fragments/navbar-fragment}"></div>
 
     <div th:if="${!isSubscribed}">
 
@@ -68,10 +68,8 @@
     </div>
 
     <div th:if="${isSubscribed}" class="glassy-input">
-        <h1 style="color: #4facfe;">You are a Premium Member!</h1>
-        <p style="font-size: 1.2rem; color: #ccc; max-width: 600px; margin: 1rem auto;">
-            Thank you for supporting GameFlix. You currently have access to all premium features.
-        </p>
+        <h1>You are a Premium Member!</h1>
+        <h2>Thank you for supporting GameFlix. You currently have access to all premium features.</h2>
 
         <div class="glassy-container" style="display: inline-block; min-width: 300px;">
             <h4>Current Plus Plan</h4>

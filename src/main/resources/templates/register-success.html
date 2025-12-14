@@ -8,7 +8,13 @@
 <body>
     <div th:replace="~{fragments/navbar-fragment}"></div>
 
-    <h2>Success! Your account has been registered.</h2>
-    <p>You can now <a th:href="@{/login}">login here</a>.</p>
+    <h1>GameFlix account created</h1>
+
+    <div class="glassy-container">
+        <p>Success! Your account has been registered.</p>
+        <p>You can now login.</p>
+        <a th:href="@{/login}" class="glassy-button">Log In</a>
+    </div>
+
 </body>
 </html>
