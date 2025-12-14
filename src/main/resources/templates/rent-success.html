@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>GameFlix :: Rental Success</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <h1>Rental Successful!</h1>
+    <div class="glassy-container">
+        <p>Success! Your game rental has been received. Watch out for it soon in the mail.</p>
+        <a th:href="@{/games/all}" class="glassy-button">
+            Browse for more games
+        </a>
+    </div>
+</body>
+</html>

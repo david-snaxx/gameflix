@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>GameFlix :: Rental Error: Duplicate</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <h1>Error! Already Renting</h1>
+    <div class="glassy-container">
+        <p>It seems that you already have a copy of this game rented. Look around for something different!</p>
+        <a th:href="@{/games/all}" class="glassy-button">
+            Browse for more games
+        </a>
+    </div>
+</body>
+</html>

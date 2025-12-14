@@ -12,6 +12,7 @@
 
     <h1 th:text="${game.name}">GameTitle</h1>
 
+    <!--game overview-->
     <div class="glassy-container" style="display: flex; gap: 20px; align-items: flex-start;">
         <img th:if="${game.coverUrl}"
              th:src="${game.coverUrl.startsWith('//') ? 'https:' + game.coverUrl : game.coverUrl}"
@@ -37,6 +38,33 @@
                 <span th:text="${genre}">Genre</span>
             </span>
         </div>
+    </div>
+
+    <!--not subscribed user rental section-->
+    <div sec:authorize="isAuthenticated() && !hasRole('SUBSCRIBER')" class="glassy-container" style="text-align: center; border: 1px solid red; margin-bottom: 2rem;">
+
+        <h3 style="color: red; margin-top: 0;">Unlock Access</h3>
+        <p>You must be subscribed to GameFlix plus to rent this game.</p>
+
+        <a th:href="@{/subscribe}" class="glassy-button button-primary" style="display: inline-block;">
+            Subscribe
+        </a>
+    </div>
+
+    <div sec:authorize="!isAuthenticated()" class="glassy-container" style="text-align: center; border: 1px solid red; margin-bottom: 2rem;">
+
+        <h3 style="color: red; margin-top: 0;">Join GameFlix to Unlock Access</h3>
+        <p>Create an account to rent this game and many others.</p>
+
+        <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1rem;">
+            <a th:href="@{/login}" class="glassy-button button-primary" style="text-decoration: none;">
+                Log In
+            </a>
+            <a th:href="@{/register}" class="glassy-button" style="text-decoration: none; background: rgba(255,255,255,0.1);">
+                Sign Up
+            </a>
+        </div>
+
     </div>
 
     <!--game summary-->

@@ -3,6 +3,8 @@ package com.example.gameflixbackend.usermanagement.model;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -39,6 +41,16 @@ public class User implements Serializable {
 
     @Column(name = "phone_number")
     public String phoneNumber;
+
+    @ElementCollection
+    @CollectionTable(name = "user_rentals_current", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "game_id")
+    private List<Long> currentlyRentingIds = new ArrayList<>();
+
+    @ElementCollection
+    @CollectionTable(name = "user_rentals_history", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "game_id")
+    private List<Long> rentalHistoryIds = new ArrayList<>();
 
     @Column
 
@@ -127,5 +139,22 @@ public class User implements Serializable {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public List<Long> getCurrentlyRentingIds() {
+        return currentlyRentingIds == null ? new ArrayList<>() : currentlyRentingIds;
+    }
+
+    public List<Long> getRentalHistoryIds() {
+        return rentalHistoryIds == null ? new ArrayList<>() : rentalHistoryIds;
+    }
+
+    public void addRental(Long gameId) {
+        this.currentlyRentingIds.add(gameId);
+        this.rentalHistoryIds.add(gameId);
+    }
+
+    public void removeRental(Long gameId) {
+        this.currentlyRentingIds.remove(gameId);
     }
 }
