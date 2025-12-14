@@ -63,7 +63,7 @@ public class SubscriptionsController {
         Transaction transaction = new Transaction(user.getId(), cardName, last4, cardExpiry,9.99);
         transactionRepository.save(transaction);
 
-        return "redirect:/subscribe?success=true";
+        return "subscriptions-success";
     }
 
     @PostMapping("/subscribe/unsubscribe")
@@ -78,7 +78,7 @@ public class SubscriptionsController {
         user.setSubscribed(false);
         this.userRepository.save(user);
 
-        return  "redirect:/subscribe/success";
+        return  "subscriptions-success";
     }
 
     @GetMapping("/subscribe/success")

@@ -46,10 +46,10 @@ public class AdminPageController {
         if (Objects.nonNull(game)) {
             // duplicates are not allowed
             if (this.gameRepository.existsByName(game.name)) {
-                return "redirect:/admin/igdb-search?error=duplicate&query=" + game.name;
+                return "redirect:/admin/igdb-search?error=duplicate";
             }
             this.gameRepository.save(game);
-            return "redirect:/admin/igdb-search?success=true&query=" + game.name;
+            return "redirect:/admin/igdb-search?success=true";
         }
         return "redirect:/admin/igdb-search?error=generic";
     }
