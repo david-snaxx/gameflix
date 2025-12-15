@@ -61,7 +61,7 @@
             <a th:href="@{/login}" class="glassy-button button-primary" style="text-decoration: none;">
                 Log In
             </a>
-            <a th:href="@{/register}" class="glassy-button" style="text-decoration: none; background: rgba(255,255,255,0.1);">
+            <a th:href="@{/register}" class="glassy-button">
                 Sign Up
             </a>
         </div>
@@ -115,7 +115,6 @@
             <img th:each="screen : ${game.screenshotUrls}"
                  th:src="${screen.startsWith('//') ? 'https:' + screen : screen}"
                  style="height: 200px; width: auto; border-radius: 10px; flex-shrink: 0;"
-                 loading="lazy"
             />
         </div>
     </div>
@@ -127,8 +126,7 @@
             <iframe th:each="videoId : ${game.videoUrls}"
                     width="400" height="225"
                     th:src="'https://www.youtube.com/embed/' + ${videoId}"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen
+                    allow="picture-in-picture"
                     style="border: none; border-radius: 12px;">
             </iframe>
 

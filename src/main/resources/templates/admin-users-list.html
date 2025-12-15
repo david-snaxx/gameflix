@@ -8,46 +8,48 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-    <div th:replace="~{fragments/navbar-fragment}"></div>
-    <h2>Gameflix Users</h2>
-    <div th:if="${userList != null}" class="glassy-container">
-        <table>
-            <thead>
-            <tr>
-                <th>Username</th>
-                <th>Subscriber</th>
-                <th>Admin</th>
-                <th>Delete Action</th>
-                <th>Sub State Action</th>
-                <th>Admin State Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="user : ${userList}">
-                <td th:text="${user.username}">Username</td>
-                <td th:text="${user.isSubscribed}">Subscribed</td>
-                <td th:text="${user.isAdmin}">Admin</td>
-                <td>
-                    <form th:action="@{/admin/all-users/delete}" method="post">
-                        <input type="hidden" name="userId" th:value="${user.id}" class="glassy-input">
-                        <button type="submit" class="glassy-button button-danger">Delete</button>
-                    </form>
-                </td>
-                <td>
-                    <form th:action="@{/admin/all-users/toggleSub}" method="post">
-                        <input type="hidden" name="userId" th:value="${user.id}" class="glassy-input">
-                        <button type="submit" class="glassy-button button-danger">Swap Subscriber</button>
-                    </form>
-                </td>
-                <td>
-                    <form th:action="@{/admin/all-users/toggleAdmin}" method="post">
-                        <input type="hidden" name="userId" th:value="${user.id}" class="glassy-input">
-                        <button type="submit" class="glassy-button button-danger">Swap Admin</button>
-                    </form>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+    <div sec:authorize="hasRole('ADMIN')">
+        <div th:replace="~{fragments/navbar-fragment}"></div>
+        <h2>Gameflix Users</h2>
+        <div th:if="${userList != null}" class="glassy-container">
+            <table>
+                <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Subscriber</th>
+                    <th>Admin</th>
+                    <th>Delete Action</th>
+                    <th>Sub State Action</th>
+                    <th>Admin State Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user : ${userList}">
+                    <td th:text="${user.username}">Username</td>
+                    <td th:text="${user.isSubscribed}">Subscribed</td>
+                    <td th:text="${user.isAdmin}">Admin</td>
+                    <td>
+                        <form th:action="@{/admin/all-users/delete}" method="post">
+                            <input type="hidden" name="userId" th:value="${user.id}" class="glassy-input">
+                            <button type="submit" class="glassy-button button-danger">Delete</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form th:action="@{/admin/all-users/toggleSub}" method="post">
+                            <input type="hidden" name="userId" th:value="${user.id}" class="glassy-input">
+                            <button type="submit" class="glassy-button button-danger">Swap Subscriber</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form th:action="@{/admin/all-users/toggleAdmin}" method="post">
+                            <input type="hidden" name="userId" th:value="${user.id}" class="glassy-input">
+                            <button type="submit" class="glassy-button button-danger">Swap Admin</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </body>
 </html>
